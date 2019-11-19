@@ -53,8 +53,10 @@ requests['edit'] = (script) => {
       file=$(mktemp)
       trap "rm -f $file" EXIT
       cat > "$file"
-      set -- "$file" "${anchorLine}" "${anchorColumn}" "${cursorLine}" "${cursorColumn}"
-      ${script}
+      edit() {
+        ${script}
+      }
+      edit "$file" "${anchorLine}" "${anchorColumn}" "${cursorLine}" "${cursorColumn}" > /dev/null 2>&1
       cat "$file"
     `,
     input
