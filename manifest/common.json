@@ -28,8 +28,8 @@
     }
   ],
   "icons": {
-    "16": "packages/chrome.png",
-    "48": "packages/chrome.png",
-    "128": "packages/chrome.png"
+    "16": "packages/edit.png",
+    "48": "packages/edit.png",
+    "128": "packages/edit.png"
   }
 }

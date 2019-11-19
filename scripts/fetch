@@ -10,5 +10,5 @@ fetch() {
 mkdir -p packages
 cd packages
 
-fetch 'https://upload.wikimedia.org/wikipedia/commons/a/a5/Google_Chrome_icon_(September_2014).svg' chrome.svg
-fetch https://i.imgur.com/lSqCvyz.png chrome.png
+fetch https://github.com/FortAwesome/Font-Awesome/raw/master/svgs/solid/edit.svg
+fetch https://i.imgur.com/uw1fOR7.png edit.png
