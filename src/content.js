@@ -43,6 +43,7 @@ requests['edit'] = (script) => {
   }
   const [[anchorLine, anchorColumn], [cursorLine, cursorColumn]] = getSelectionRange(lastUsedInput)
   const input = lastUsedInput.value
+  lastUsedInput.classList.add('chrome-editor')
   lastUsedInput.value = ''
   lastUsedInput.readOnly = true
   lastUsedInput.blur()
@@ -69,6 +70,7 @@ const responses = {}
 
 responses['edit'] = (response) => {
   const value = response.output.replace(/\n$/, '')
+  lastUsedInput.classList.remove('chrome-editor')
   lastUsedInput.readOnly = false
   lastUsedInput.value = value
 }

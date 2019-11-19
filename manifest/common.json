@@ -24,6 +24,9 @@
       ],
       "js": [
         "src/content.js"
+      ],
+      "css": [
+        "src/style.css"
       ]
     }
   ],
