@@ -17,6 +17,12 @@
 
 ### Chrome
 
+#### Installing from the Chrome Web Store
+
+https://chrome.google.com/webstore/detail/editor/oaagifcpibmdpajhjfcdjliekffjcnnk
+
+#### Installing from the source
+
 ``` sh
 make chrome
 ```
@@ -51,7 +57,7 @@ Press <kbd>Control</kbd> + <kbd>i</kbd> to edit the last used text input with yo
 ### Cross-extension messaging
 
 ``` javascript
-const port = chrome.runtime.connect('<extension-id>') // for a Chrome extension
+const port = chrome.runtime.connect('oaagifcpibmdpajhjfcdjliekffjcnnk') // for a Chrome extension
 const port = chrome.runtime.connect('editor@alexherbo2.github.com') // for a Firefox extension
 port.postMessage({ command: 'edit', arguments: ['kitty kak "$1" -e "select $2.$3,$4.$5"'] })
 ```
