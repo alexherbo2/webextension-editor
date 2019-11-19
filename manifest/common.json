@@ -1,0 +1,35 @@
+{
+  "manifest_version": 2,
+  "name": "Editor",
+  "description": "Open an external editor to edit text inputs",
+  "version": "0.1.0",
+  "commands": {
+    "edit": {
+      "description": "Edit the last used text input with your favorite editor",
+      "suggested_key": {
+        "default": "Ctrl+I"
+      }
+    }
+  },
+  "background": {
+    "scripts": [
+      "src/background.js"
+    ],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "src/content.js"
+      ]
+    }
+  ],
+  "icons": {
+    "16": "packages/chrome.png",
+    "48": "packages/chrome.png",
+    "128": "packages/chrome.png"
+  }
+}
