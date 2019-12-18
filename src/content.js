@@ -73,6 +73,7 @@ responses['edit'] = (response) => {
   lastUsedInput.classList.remove('chrome-editor')
   lastUsedInput.readOnly = false
   lastUsedInput.value = value
+  lastUsedInput.focus()
 }
 
 // Initialization ──────────────────────────────────────────────────────────────
