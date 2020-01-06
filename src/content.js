@@ -52,7 +52,7 @@ requests['edit'] = (script) => {
     shell: true,
     command: `
       file=$(mktemp)
-      trap "rm -f $file" EXIT
+      trap 'rm -f "$file"' EXIT
       cat > "$file"
       edit() {
         ${script}
