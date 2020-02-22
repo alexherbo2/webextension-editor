@@ -59,7 +59,10 @@ Press <kbd>Control</kbd> + <kbd>i</kbd> to edit the last used text input with yo
 ``` javascript
 const port = chrome.runtime.connect('oaagifcpibmdpajhjfcdjliekffjcnnk') // for a Chrome extension
 const port = chrome.runtime.connect('editor@alexherbo2.github.com') // for a Firefox extension
-port.postMessage({ command: 'edit', arguments: ['kitty kak "$1" -e "select $2.$3,$4.$5"'] })
+port.postMessage({
+  command: 'edit',
+  arguments: [`alacritty --class 'Alacritty · Floating' --command kak "$1" -e "select $2.$3,$4.$5"`]
+})
 ```
 
 More examples can be found at [Krabby].
