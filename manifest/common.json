@@ -3,13 +3,24 @@
   "name": "Editor",
   "description": "Open an external editor to edit text inputs",
   "version": "0.1.0",
+  "permissions": [
+    "storage"
+  ],
   "commands": {
     "edit": {
       "description": "Edit the last used text input with your favorite editor",
       "suggested_key": {
-        "default": "Ctrl+I"
+        "default": "Ctrl+I",
+        "mac": "Command+I"
       }
     }
+  },
+  "browser_action": {
+    "default_popup": "src/pages/options/index.html"
+  },
+  "options_ui": {
+    "page": "src/pages/options/index.html",
+    "open_in_tab": false
   },
   "background": {
     "scripts": [

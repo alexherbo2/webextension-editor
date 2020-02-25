@@ -1,27 +1,27 @@
-# Editor for [Chrome]
+# Editor for [Chrome] and [Firefox]
 
-###### [Chrome](#chrome) | [Firefox](#firefox)
+[Chrome]: https://google.com/chrome/
+[Firefox]: https://mozilla.org/firefox/
 
-> Open an external editor to edit text inputs.
+Open an external editor to edit text inputs.
 
 ## Dependencies
 
-- [Zip] (Zip is used to package the extension)
-- [Inkscape] (Inkscape is used to convert SVG to PNG when uploading the extension)
+- [jq]
+- [Zip]
 
-### Extensions
+[jq]: https://stedolan.github.io/jq/
+[Zip]: http://infozip.sourceforge.net/Zip.html
 
-- [Shell] (Chrome API to execute external commands)
+###### Extensions
+
+- [Shell]
+
+[Shell]: https://github.com/alexherbo2/chrome-shell
 
 ## Installation
 
-### Chrome
-
-#### Installing from the Chrome Web Store
-
-https://chrome.google.com/webstore/detail/editor/oaagifcpibmdpajhjfcdjliekffjcnnk
-
-#### Installing from the source
+###### Chrome
 
 ``` sh
 make chrome
@@ -29,11 +29,7 @@ make chrome
 
 Open the _Extensions_ page by navigating to `chrome://extensions`, enable _Developer mode_ then _Load unpacked_ to select the extension directory: `target/chrome`.
 
-![Load extension](https://developer.chrome.com/static/images/get_started/load_extension.png)
-
-See the [Getting Started Tutorial] for more information.
-
-### Firefox
+###### Firefox
 
 ``` sh
 make firefox
@@ -42,72 +38,80 @@ make firefox
 - Open `about:config`, change `xpinstall.signatures.required` to `false`.
 - Open `about:addons` ❯ _Extensions_, click _Install add-on from file_ and select the package file: `target/firefox/package.zip`.
 
-#### Developing
+## Configuration
 
-Open `about:debugging` ❯ _This Firefox_ ❯ _Temporary extensions_, click _Load temporary add-on_ and select the manifest file: `target/firefox/manifest.json`.
+###### Chrome
 
-[![Load extension](https://img.youtube.com/vi_webp/cer9EUKegG4/maxresdefault.webp)](https://youtu.be/cer9EUKegG4)
+Open `chrome://extensions/configureCommands` to configure the keyboard shortcuts.
 
-See [Firefox – Your first extension] for more information.
+###### Firefox
+
+Open `about:addons` ❯ _Extensions_ and click _Manage extension shortcuts_ in the menu.
 
 ## Usage
 
 Press <kbd>Control</kbd> + <kbd>i</kbd> to edit the last used text input with your favorite editor.
 
-### Cross-extension messaging
-
-``` javascript
-const port = chrome.runtime.connect('oaagifcpibmdpajhjfcdjliekffjcnnk') // for a Chrome extension
-const port = chrome.runtime.connect('editor@alexherbo2.github.com') // for a Firefox extension
-port.postMessage({
-  command: 'edit',
-  arguments: [`alacritty --class 'Alacritty · Floating' --command kak "$1" -e "select $2.$3,$4.$5"`]
-})
-```
-
-More examples can be found at [Krabby].
-
-See [Cross-extension messaging] for more details.
-
-## Configuration
-
-### Chrome
-
-Open `chrome://extensions/configureCommands` to configure the keyboard shortcuts.
-
-### Firefox
-
-Open `about:addons` ❯ _Extensions_ and click _Manage extension shortcuts_ in the menu.
-
-![Manage extension shortcuts](https://user-media-prod-cdn.itsre-sumo.mozilla.net/uploads/gallery/images/2019-02-21-18-47-38-921651.png)
-
 ## Commands
 
-- `edit` (<kbd>Control</kbd> + <kbd>i</kbd>) (`xterm -e $EDITOR "$1"`)
+###### `edit`
 
-## Messages
+Edit the last used text input with your favorite editor.
+Default: <kbd>Control</kbd> + <kbd>i</kbd>.
 
-- `port.postMessage({ command: 'edit', arguments: ['<command> <file> <anchor-line> <anchor-column> <cursor-line> <cursor-column>'] })`
+## Options
 
-## References
+###### `editor`
 
-- [Create a keyboard interface to the web]
+Sets the editor to be used.
 
-[Chrome]: https://google.com/chrome/
-[Chrome Web Store]: https://chrome.google.com/webstore
+Parameters:
 
-[Firefox]: https://mozilla.org/firefox/
-[Firefox Add-ons]: https://addons.mozilla.org
+- `file`
+- `anchor_line`
+- `anchor_column`
+- `cursor_line`
+- `cursor_column`
 
-[Zip]: http://infozip.sourceforge.net/Zip.html
-[Inkscape]: https://inkscape.org
+Default: `xterm -e "$EDITOR" "${file}"`.
 
-[Shell]: https://github.com/alexherbo2/chrome-shell
+**Example** – Open [Kakoune] in [Alacritty]:
 
-[Getting Started Tutorial]: https://developer.chrome.com/extensions/getstarted
-[Cross-extension messaging]: https://developer.chrome.com/extensions/messaging#external
+``` sh
+alacritty --class 'Alacritty · Floating' --command kak "${file}" -e "select ${anchor_line}.${anchor_column},${cursor_line}.${cursor_column}"
+```
 
-[Firefox – Your first extension]: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension
+[Kakoune]: https://kakoune.org
+[Alacritty]: https://github.com/alacritty/alacritty
+
+## Cross-extension messaging
+
+``` javascript
+// Environment variables
+switch (true) {
+  case (typeof browser !== 'undefined'):
+    var PLATFORM = 'firefox'
+    var EDITOR_EXTENSION_ID = 'editor@alexherbo2.github.com'
+    break
+  case (typeof chrome !== 'undefined'):
+    var PLATFORM = 'chrome'
+    var EDITOR_EXTENSION_ID = 'oaagifcpibmdpajhjfcdjliekffjcnnk'
+    break
+}
+
+// Initialization
+const editor = {}
+editor.port = chrome.runtime.connect(EDITOR_EXTENSION_ID)
+editor.send = (command, ...arguments) => {
+  editor.port.postMessage({ command, arguments })
+}
+
+// Usage
+editor.send('edit')
+```
+
+You can find some examples in [Krabby].
 
 [Krabby]: https://krabby.netlify.com
-[Create a keyboard interface to the web]: https://alexherbo2.github.io/blog/chrome/create-a-keyboard-interface-to-the-web/
+
+See the [source](src) for a complete reference.

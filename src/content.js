@@ -1,101 +1,53 @@
-// Variables ───────────────────────────────────────────────────────────────────
+// State ───────────────────────────────────────────────────────────────────────
 
-let lastUsedInput
+const state = {}
+state.lastUsedInput = null
 
 window.addEventListener('focus', (event) => {
-  if (isText(document.activeElement)) {
-    lastUsedInput = document.activeElement
+  if (isText(event.target)) {
+    state.lastUsedInput = event.target
   }
 }, true)
 
-// Environment variables ───────────────────────────────────────────────────────
-
-switch (true) {
-  case (typeof browser !== 'undefined'):
-    var PLATFORM = 'firefox'
-    var SHELL_EXTENSION_ID = 'shell@alexherbo2.github.com'
-    break
-  case (typeof chrome !== 'undefined'):
-    var PLATFORM = 'chrome'
-    var SHELL_EXTENSION_ID = 'ohgecdnlcckpfnhjepfdcdgcfgebkdgl'
-    break
-}
-
-// Extensions ──────────────────────────────────────────────────────────────────
-
-// Shell
-const shell = {}
-shell.port = chrome.runtime.connect(SHELL_EXTENSION_ID)
-
 // Requests ────────────────────────────────────────────────────────────────────
 
-const requests = {}
-
-requests['edit'] = (script) => {
-  if (! lastUsedInput) {
-    return
-  }
-  if (! script) {
-    script = `
-      EDITOR=\${EDITOR:-vi}
-      xterm -e $EDITOR "$1"
-    `
-  }
-  const [[anchorLine, anchorColumn], [cursorLine, cursorColumn]] = getSelectionRange(lastUsedInput)
-  const input = lastUsedInput.value
-  lastUsedInput.classList.add('chrome-editor')
-  lastUsedInput.value = ''
-  lastUsedInput.readOnly = true
-  lastUsedInput.blur()
-  shell.port.postMessage({
-    id: 'edit',
-    shell: true,
-    command: `
-      file=$(mktemp)
-      trap 'rm -f "$file"' EXIT
-      cat > "$file"
-      edit() {
-        ${script}
-      }
-      edit "$file" "${anchorLine}" "${anchorColumn}" "${cursorLine}" "${cursorColumn}" > /dev/null 2>&1
-      cat "$file"
-    `,
-    input
-  })
-}
-
-// Responses ───────────────────────────────────────────────────────────────────
-
-const responses = {}
-
-responses['edit'] = (response) => {
-  const value = response.output.replace(/\n$/, '')
-  lastUsedInput.classList.remove('chrome-editor')
-  lastUsedInput.readOnly = false
-  lastUsedInput.value = value
-  lastUsedInput.focus()
-}
-
-// Initialization ──────────────────────────────────────────────────────────────
-
-// Requests
 chrome.runtime.onConnect.addListener((port) => {
   port.onMessage.addListener((request) => {
     const command = requests[request.command]
     const arguments = request.arguments || []
+    const self = {
+      port
+    }
     if (command) {
-      command(...arguments)
+      command.apply(self, arguments)
     }
   })
 })
 
-// Responses
-shell.port.onMessage.addListener((response) => {
-  const command = responses[response.id]
-  if (command) {
-    command(response)
+const requests = {}
+
+requests['edit-text-input'] = function() {
+  if (! state.lastUsedInput) {
+    return
   }
-})
+  const [[anchorLine, anchorColumn], [cursorLine, cursorColumn]] = getSelectionRange(state.lastUsedInput)
+  const text = state.lastUsedInput.value
+  state.lastUsedInput.classList.add('chrome-editor')
+  state.lastUsedInput.value = ''
+  state.lastUsedInput.readOnly = true
+  state.lastUsedInput.blur()
+  this.port.postMessage({
+    command: 'edit',
+    arguments: [{ text, anchorLine, anchorColumn, cursorLine, cursorColumn }]
+  })
+}
+
+requests['fill-text-input'] = (text) => {
+  state.lastUsedInput.classList.remove('chrome-editor')
+  state.lastUsedInput.readOnly = false
+  state.lastUsedInput.value = text
+  state.lastUsedInput.focus()
+}
 
 // Helpers ─────────────────────────────────────────────────────────────────────
 
