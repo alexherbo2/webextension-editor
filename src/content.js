@@ -72,7 +72,7 @@ const getSelectionRange = (input) => {
 }
 
 const getSelectionPosition = (input, position) => {
-  const textLines = input.value.substring(0, position).split('\n')
+  const textLines = input.value.slice(0, position).split('\n')
   const line = textLines.length
   const column = textLines[textLines.length - 1].length + 1
   return [line, column]
