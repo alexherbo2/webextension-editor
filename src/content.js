@@ -32,7 +32,7 @@ requests['edit-text-input'] = function() {
   }
   const [[anchorLine, anchorColumn], [cursorLine, cursorColumn]] = getSelectionRange(state.lastUsedInput)
   const text = state.lastUsedInput.value
-  state.lastUsedInput.classList.add('chrome-editor')
+  state.lastUsedInput.classList.add('webextension-editor')
   state.lastUsedInput.value = ''
   state.lastUsedInput.readOnly = true
   state.lastUsedInput.blur()
@@ -43,7 +43,7 @@ requests['edit-text-input'] = function() {
 }
 
 requests['fill-text-input'] = (text) => {
-  state.lastUsedInput.classList.remove('chrome-editor')
+  state.lastUsedInput.classList.remove('webextension-editor')
   state.lastUsedInput.readOnly = false
   state.lastUsedInput.value = text
   state.lastUsedInput.focus()

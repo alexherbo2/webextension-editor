@@ -1,7 +1,8 @@
-# Editor for [Chrome] and [Firefox]
+# Editor for [Chrome] and [Firefox] – [WebExtensions]
 
 [Chrome]: https://google.com/chrome/
 [Firefox]: https://mozilla.org/firefox/
+[WebExtensions]: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions
 
 Open an external editor to edit text inputs.
 
@@ -17,7 +18,7 @@ Open an external editor to edit text inputs.
 
 - [Shell]
 
-[Shell]: https://github.com/alexherbo2/chrome-shell
+[Shell]: https://github.com/alexherbo2/webextension-shell
 
 ## Installation
 
