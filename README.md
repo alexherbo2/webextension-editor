@@ -4,6 +4,8 @@
 [Firefox]: https://mozilla.org/firefox/
 [WebExtensions]: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions
 
+<img src="https://github.com/FortAwesome/Font-Awesome/raw/master/svgs/solid/edit.svg" height="16" align="right">
+
 Open an external editor to edit text inputs.
 
 ## Dependencies
