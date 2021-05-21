@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Editor",
   "description": "Open an external editor to edit text inputs",
   "version": "0.1.0",
@@ -15,7 +15,7 @@
       }
     }
   },
-  "browser_action": {
+  "action": {
     "default_popup": "src/pages/options/index.html"
   },
   "options_ui": {
@@ -23,10 +23,7 @@
     "open_in_tab": false
   },
   "background": {
-    "scripts": [
-      "src/background.js"
-    ],
-    "persistent": false
+    "service_worker": "background.js"
   },
   "content_scripts": [
     {
