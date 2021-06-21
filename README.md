@@ -79,7 +79,7 @@ Default: `xterm -e "$EDITOR" "${file}"`.
 **Example** – Open [Kakoune] in [Alacritty]:
 
 ``` sh
-alacritty --class 'Alacritty · Floating' --command \
+alacritty --class 'popup' --command \
   kak "${file}" -e "
     select ${anchor_line}.${anchor_column},${cursor_line}.${cursor_column}
   "
