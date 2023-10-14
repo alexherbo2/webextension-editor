@@ -22,9 +22,6 @@
     "page": "src/pages/options/index.html",
     "open_in_tab": false
   },
-  "background": {
-    "service_worker": "background.js"
-  },
   "content_scripts": [
     {
       "matches": [
