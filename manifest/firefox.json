@@ -1,5 +1,8 @@
 {
-  "applications": {
+  "background": {
+    "scripts": [ "background.js" ]
+  },
+  "browser_specific_settings": {
     "gecko": {
       "id": "editor@alexherbo2.github.com"
     }
